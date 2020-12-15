@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ProducentKonsumentC
+namespace ProducentKonsument
 {
     public partial class Form1 : Form
     {
@@ -26,9 +26,6 @@ namespace ProducentKonsumentC
             
         private Thread tp;                                                               //watek producenta
         private Thread tk;                                                               //watek konsumenta
-            
-        bool tpIsAlive = false;
-        bool tkIsAlive = false;
 
         //producent
         private static void Producent(object num)
@@ -72,7 +69,6 @@ namespace ProducentKonsumentC
             tp = new Thread(Producent);
             tp.Start();
             tp.Name = "Producent";
-            tpIsAlive = true;
 
             button1.Enabled = false;
         }
@@ -85,7 +81,6 @@ namespace ProducentKonsumentC
             tk = new Thread(Konsument);
             tk.Start();
             tk.Name = "Konsument";
-            tkIsAlive = true;
             
             button2.Enabled = false;
         }
@@ -113,20 +108,17 @@ namespace ProducentKonsumentC
             m_Kcounter.Text = Kcounter.ToString();
 
             m_wBuforze.Text = Bcounter.ToString();
+
+            button1.Enabled = tp is null || !tp.IsAlive;
+            button2.Enabled = tk is null || !tk.IsAlive;
+                
         }
 
         //przycisk Zatrzymaj
         private void button3_Click(object sender, EventArgs e)
         {
-            if (tpIsAlive)
-            {
-                tp.Abort();
-            }
-
-            if (tkIsAlive)
-            {
-                tk.Abort();
-            }
+            tp?.Abort();
+            tk?.Abort();
         }
 
     }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProducentKonsumentC.Properties
+namespace ProducentKonsument.Properties
 {
 
 

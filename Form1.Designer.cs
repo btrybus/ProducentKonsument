@@ -1,4 +1,4 @@
-﻿namespace ProducentKonsumentC
+﻿namespace ProducentKonsument
 {
     partial class Form1
     {

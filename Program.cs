@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ProducentKonsumentC
+namespace ProducentKonsument
 {
     static class Program
     {
