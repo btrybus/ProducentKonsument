@@ -19,28 +19,36 @@ namespace ProducentKonsument
 
         private const int N = 10;
 
-        private static int[] buffer = new int[N];                                               //buffor
-        private static int Pdelay = 500, Kdelay = 1000;                                         //opoznienie
-        private static int Pcounter = 0, Kcounter = 0;                                          //licznik produkcji/konsumpcji
+        private static int[] buffer = new int[N];                                               // bufor
+        private static int Pdelay = 500, Kdelay = 1000;                                         // czas produkcji/konsupmcji
+        private static int Pcounter = 0, Kcounter = 0;                                          // licznik produkcji/konsumpcji
         private static int Bcounter = 0;
-            
-        private Thread tp;                                                               //watek producenta
-        private Thread tk;                                                               //watek konsumenta
+
+        private static Semaphore Wolne = new Semaphore(N, N);
+        private static Semaphore Pelne = new Semaphore(0, N);
+
+        private Thread tp;                                                               // watek producenta
+        private Thread tk;                                                               // watek konsumenta
 
         //producent
         private static void Producent(object num)
         {
-            int p = 0;
+            int j = 0;
 
             while( true )
             {
                 Thread.Sleep(Pdelay);
 
-                buffer[p] = 1;
-                p = (p + 1) % N;
+                // opuszczenie Wolne
+                Wolne.WaitOne();
+
+                buffer[j] = 1;
+                j = (j + 1) % N;
                 Pcounter++;
                 Bcounter++;
 
+                // podniesienie Pelne
+                Pelne.Release();
             }
         }
 
@@ -51,11 +59,14 @@ namespace ProducentKonsument
 
             while (true)
             {
+                Pelne.WaitOne();
 
                 buffer[k] = 0;
                 k = (k + 1) % N;
                 Kcounter++;
                 Bcounter--;
+
+                Wolne.Release();
 
                 Thread.Sleep( Kdelay );
             }
